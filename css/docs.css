@@ -1422,7 +1422,8 @@ grey
 .chartDemo-main {
   height: 400px;
   /*width: 778px !important;*/
-  overflow: hidden;
+  /*overflow: hidden;*/
+  overflow: auto;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #e3e3e3;
@@ -1666,4 +1667,20 @@ ul.slides li span {
 .scrollspy-nav a.am-active {
   color: #fff;
   font-weight: 700;
+}
+.doc-content h2 a {
+  float: right;
+  margin: 3px;
+}
+.doc-content h3 a {
+  float: right;
+  margin: 3px;
+}
+.doc-content h4 a {
+  float: right;
+  margin: 3px;
+}
+.doc-content p a {
+  float: right;
+  margin: 3px;
 }
