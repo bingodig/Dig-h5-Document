@@ -1,0 +1,19 @@
+{
+  "name": "SVGTest3",
+  "version": "0.0.1",
+  "description": "svg test",
+  "keywords": [
+    "snap"
+  ],
+  "authors": [
+    "caowj"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

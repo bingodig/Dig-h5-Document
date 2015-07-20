@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <script src="snap.svg-min.js"></script>
+</head>
+<body>
+<style>
+    #divContainer {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: stretch;
+        justify-content: space-around;
+    }
+
+    .svgContainer {
+        background-color: #EEEEEE;
+    }
+
+    .svgTest {
+        height: 500px;
+        width: 500px;
+        border: 2px solid;
+    }
+</style>
+<div id="divContainer">
+    <div class="svgContainer">
+        <svg id="svg2" class="svgTest">
+            <defs>
+                <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="736.1689" y1="46.1816" x2="634.331"
+                                y2="26.082"
+                                gradientTransform="matrix(0.6113 -0.7914 -0.7914 -0.6113 -349.3604 632.0596)">
+                    <stop offset="0.0182" style="stop-color:#8CD1FA"/>
+                    <stop offset="0.192" style="stop-color:#88CFF8"/>
+                    <stop offset="0.3666" style="stop-color:#7CCAF3"/>
+                    <stop offset="0.5416" style="stop-color:#68C0EA"/>
+                    <stop offset="0.7169" style="stop-color:#4CB4DD"/>
+                    <stop offset="0.8909" style="stop-color:#28A3CD"/>
+                    <stop offset="1" style="stop-color:#0D97C1"/>
+                </linearGradient>
+                <path id="svg2_arrow_transformRate" fill="url(#SVGID_1_)" d="M63.827,61.182c-4.61,11.659-15.718,18.868-27.556,19.103l-1.027,6.002l-8.769-12.395
+				l12.391-8.771l-0.964,5.632c7.5-0.809,14.311-5.668,17.22-13.176c0-0.003,0.003-0.008,0.005-0.017
+				c4.136-10.7-1.198-22.771-11.898-26.919c-0.046-0.017-0.092-0.028-0.139-0.044l5.337-3.782l-4.059-5.735
+				c0.759,0.228,1.515,0.481,2.266,0.773c15.552,6.027,23.3,23.581,17.275,39.13C63.883,61.05,63.854,61.115,63.827,61.182z"/>
+            </defs>
+        </svg>
+    </div>
+    <div>
+        <svg id="svg3" class="svgTest">
+            <defs>
+                <linearGradient id="svg3_SVGID_1_" gradientUnits="userSpaceOnUse" x1="736.1689" y1="46.1816"
+                                x2="634.331"
+                                y2="26.082"
+                                gradientTransform="matrix(0.6113 -0.7914 -0.7914 -0.6113 -349.3604 632.0596)">
+                    <stop offset="0.0182" style="stop-color:#8CD1FA"/>
+                    <stop offset="0.192" style="stop-color:#88CFF8"/>
+                    <stop offset="0.3666" style="stop-color:#7CCAF3"/>
+                    <stop offset="0.5416" style="stop-color:#68C0EA"/>
+                    <stop offset="0.7169" style="stop-color:#4CB4DD"/>
+                    <stop offset="0.8909" style="stop-color:#28A3CD"/>
+                    <stop offset="1" style="stop-color:#0D97C1"/>
+                </linearGradient>
+                <path id="svg3_arrow_transformRate" fill="url(#SVGID_1_)" d="M63.827,61.182c-4.61,11.659-15.718,18.868-27.556,19.103l-1.027,6.002l-8.769-12.395
+				l12.391-8.771l-0.964,5.632c7.5-0.809,14.311-5.668,17.22-13.176c0-0.003,0.003-0.008,0.005-0.017
+				c4.136-10.7-1.198-22.771-11.898-26.919c-0.046-0.017-0.092-0.028-0.139-0.044l5.337-3.782l-4.059-5.735
+				c0.759,0.228,1.515,0.481,2.266,0.773c15.552,6.027,23.3,23.581,17.275,39.13C63.883,61.05,63.854,61.115,63.827,61.182z"/>
+            </defs>
+        </svg>
+
+    </div>
+</div>
+<script>
+    var borderAnInterval = 500;
+    /***********************************************
+     svg2
+     ************************************************/
+    var s2 = Snap("#svg2");
+
+    // 左杯壁 左曲线
+    var s2LBorderLPath = s2.paper.path("M20,50Q90,200,90,480").attr({
+        fill: 'none',
+//        fill: '#999999'
+        stroke: "#999999",
+        strokeWidth: 2
+    });
+
+    // 左杯壁 右曲线（从下到上绘图）
+    var s2LBorderRPath = s2.paper.path("M110,480Q110,200,40,50").attr({
+        fill: 'none',
+//        fill: '#999999'
+        stroke: "#999999",
+        strokeWidth: 2
+    });
+
+    // 右杯壁 左曲线
+    var s2RBorderLPath = s2.paper.path("M360,50Q290,200,290,480").attr({
+        fill: 'none',
+        stroke: "#999999",
+        strokeWidth: 2
+    });
+
+    // 右杯壁 右曲线（从下到上绘图）
+    var s2RBorderRPath = s2.paper.path("M310,480Q310,200,380,50").attr({
+        fill: 'none',
+        stroke: "#999999",
+        strokeWidth: 2
+    });
+
+    // 获取杯壁4条曲线的长度
+    var len1 = s2LBorderLPath.getTotalLength();
+    var len2 = s2LBorderRPath.getTotalLength();
+    var len3 = s2RBorderLPath.getTotalLength();
+    var len4 = s2RBorderRPath.getTotalLength();
+
+    //    var arrowPath = s2.paper.path("M10,10l10,0l0,10,l5,0L15,30L5,20,l5,0Z").attr({
+    //        fill: '#6600FF'
+    //    });
+    var arrowPath = s2.paper.path("M10,10l10,0l0,10,l5,0L15,30L5,20,l5,0Z").attr({
+        fill: '#6600FF'
+    });
+    var arrowM = new Snap.Matrix();
+
+    arrowM.translate(0, 25);
+    var arrowPath2 = arrowPath.clone();
+    arrowPath2.transform(arrowM);
+    arrowPath2.attr({
+        opacity: 0.2
+    });
+
+    arrowM.translate(0, 25);
+    var arrowPath3 = arrowPath.clone();
+    arrowPath3.transform(arrowM);
+
+    arrowM.translate(0, 25);
+    var arrowPath4 = arrowPath.clone();
+    arrowPath4.transform(arrowM);
+
+    arrowM.translate(0, 25);
+    var arrowPath5 = arrowPath.clone();
+    arrowPath5.transform(arrowM);
+    arrowPath5.attr({
+        opacity: 0.2
+    });
+
+    arrowPath.attr({
+        opacity: 0
+    });
+
+    var arrowG = s2.paper.g(arrowPath, arrowPath2, arrowPath3, arrowPath4, arrowPath5);
+
+    function arrowAnimation(svgGroup) {
+        var p1 = svgGroup[0];
+        var p2 = svgGroup[1];
+        var p3 = svgGroup[2];
+        var p4 = svgGroup[3];
+        var p5 = svgGroup[4];
+        p1.animate({
+            opacity: 0.2
+        }, 1000);
+        p2.animate({
+            opacity: 1
+        }, 1000);
+        p4.animate({
+            opacity: 0.2
+        }, 1000);
+        p5.animate({
+            opacity: 0
+        }, 1000);
+
+        var offsetY = 25;
+        Snap.animate(0, 0 + offsetY, function (value) {
+            p1.transform(new Snap.Matrix().translate(0, value));
+        }, 1000, null, function () {
+            p1.stop();
+            p1.attr({
+                opacity: 0
+            });
+            p1.transform(new Snap.Matrix().translate(0, 0));
+
+        });
+        Snap.animate(25, 25 + offsetY, function (value) {
+            p2.transform(new Snap.Matrix().translate(0, value));
+        }, 1000, null, function () {
+            p2.stop();
+            p2.attr({
+                opacity: 0.2
+            });
+            p2.transform(new Snap.Matrix().translate(0, 25));
+        });
+        Snap.animate(50, 50 + offsetY, function (value) {
+            p3.transform(new Snap.Matrix().translate(0, value));
+        }, 1000, null, function () {
+            p3.stop();
+            p3.transform(new Snap.Matrix().translate(0, 50));
+        });
+        Snap.animate(75, 75 + offsetY, function (value) {
+            p4.transform(new Snap.Matrix().translate(0, value));
+        }, 1000, null, function () {
+            p4.stop();
+            p4.attr({
+                opacity: 1
+            });
+            p4.transform(new Snap.Matrix().translate(0, 75));
+        });
+        Snap.animate(100, 100 + offsetY, function (value) {
+            p5.transform(new Snap.Matrix().translate(0, value));
+        }, 1000, null, function () {
+            p5.stop();
+            p5.attr({
+                opacity: 0.2
+            });
+            p5.transform(new Snap.Matrix().translate(0, 100));
+        });
+    }
+
+    //    setTimeout("arrowAnimation(arrowG)", 1200);
+    setInterval("arrowAnimation(arrowG)", 1050);
+    arrowG.transform(new Snap.Matrix().scale(0.7, 0.7)).toDefs();
+
+    var ag1 = arrowG.use();
+    s2.append(ag1);
+    var ag2 = arrowG.use();
+    ag2.attr({x: 100});
+    s2.append(ag2);
+    var ag3 = arrowG.use();
+    ag3.attr({x: 200});
+    s2.append(ag3);
+    var layer1AG = Snap.set(ag1, ag2, ag3);
+    // TODO: 动画操作处理
+
+    //
+    var infoRect = s2.paper.rect(20, 38, 45, 38, 5, 5).attr({
+        fill: '#FFFFFF',
+        opacity: 0.95
+    });
+    var text1 = s2.paper.text(25, 55, '转化');
+    var text2 = s2.paper.text(25, 72, '70%');
+    var textG = s2.paper.g(infoRect, text1, text2);
+
+    // 转化箭头
+    //    var transformArrowPath =
+    // 第一个箭头位置 325 55
+    // 第二个箭头位置 300 220
+    var svg2_arrow_transformRate = Snap('#svg2_arrow_transformRate');
+
+    var svg2_arrow_transformRate_1 = svg2_arrow_transformRate.use();
+    svg2_arrow_transformRate_1.attr({
+        x: 325,
+        y: 55
+    });
+
+    s2.append(svg2_arrow_transformRate_1);
+
+    var svg2_arrow_transformRate_2 = svg2_arrow_transformRate.use();
+    svg2_arrow_transformRate_2.attr({
+        x: 300,
+        y: 220
+    });
+
+    s2.append(svg2_arrow_transformRate_2);
+
+    // TEST: 测试从外部引用svg
+    Snap.load("./assets/svg/arrow.svg", function (svg) {
+        s2.append(svg.node);
+    });
+
+    // or
+    //    var pth = s2.paper.path("M10,10L100,100");
+    //    t1.attr({textpath: pth});
+
+
+    /*
+     ********************************** svg3 ***********************************
+     */
+
+    var funnelHeiht = 430;                        // 漏斗区域总高度
+    var layer1Height = 70;                // 第二层高度比例
+    var layer2Height = 130;                // 第二层高度比例
+    var layer3Height = 200;                      // 第三层高度比例
+    var layerGapHeight = 15;                     // 每层相隔的高度
+    var layerGapHeightRate = layerGapHeight / funnelHeiht;
+
+    // 存放各层杯壁内部的四个坐标
+    var borderCoordinate = [];
+
+    // 得出各层杯壁的曲线Path和四个点，用来绘制杯壁，并保存到borderCoordinate
+    // 第一层——左杯壁
+    var s3L1LBorderLPathStr = s2LBorderLPath.getSubpath(0, layer1Height / funnelHeiht * len1);
+    var s3L1LBorderLPathPoints = Snap.parsePathString(s3L1LBorderLPathStr);
+    var s3L1LBorderPoint1 = s3L1LBorderLPathPoints[0][1] + ','
+            + s3L1LBorderLPathPoints[0][2];
+    var s3L1LBorderPoint4 = s3L1LBorderLPathPoints[1][s3L1LBorderLPathPoints[1].length - 2] + ','
+            + s3L1LBorderLPathPoints[1][s3L1LBorderLPathPoints[1].length - 1];
+
+    var s3L1LBorderRPathStr = s2LBorderRPath.getSubpath((1 - layer1Height / funnelHeiht) * len2, len2);
+    var s3L1LBorderRPathPoints = Snap.parsePathString(s3L1LBorderRPathStr);
+    var s3L1LBorderPoint3 = s3L1LBorderRPathPoints[0][1] + ','
+            + s3L1LBorderRPathPoints[0][2];
+    var s3L1LBorderPoint2 = s3L1LBorderRPathPoints[1][s3L1LBorderRPathPoints[1].length - 2] + ','
+            + s3L1LBorderRPathPoints[1][s3L1LBorderRPathPoints[1].length - 1];
+
+    // 第一层——右杯壁
+    var s3L1RBorderLPathStr = s2RBorderLPath.getSubpath(0, layer1Height / funnelHeiht * len3);          // 第一层，左边的path
+    var s3L1RBorderLPathPoints = Snap.parsePathString(s3L1RBorderLPathStr);            // 第一层左边图形的第一个点
+    var s3L1RBorderPoint1 = s3L1RBorderLPathPoints[0][1] + ','
+            + s3L1RBorderLPathPoints[0][2];
+    var s3L1RBorderPoint4 = s3L1RBorderLPathPoints[1][s3L1RBorderLPathPoints[1].length - 2] + ','
+            + s3L1RBorderLPathPoints[1][s3L1RBorderLPathPoints[1].length - 1];
+
+    var s3L1RBorderRPathStr = s2RBorderRPath.getSubpath((1 - layer1Height / funnelHeiht) * len4, len4);
+    var s3L1RBorderRPathPoints = Snap.parsePathString(s3L1RBorderRPathStr);
+    var s3L1RBorderPoint3 = s3L1RBorderRPathPoints[0][1] + ','
+            + s3L1LBorderRPathPoints[0][2];
+    var s3L1RBorderPoint2 = s3L1RBorderRPathPoints[1][s3L1RBorderRPathPoints[1].length - 2] + ','
+            + s3L1RBorderRPathPoints[1][s3L1RBorderRPathPoints[1].length - 1];
+    // 保存杯壁内部左边
+    borderCoordinate.push({
+        layer: 1,
+        leftTopX: s3L1LBorderRPathPoints[1][s3L1LBorderRPathPoints[1].length - 2],
+        leftTopY: s3L1LBorderRPathPoints[1][s3L1LBorderRPathPoints[1].length - 1],
+        leftBottomX: s3L1LBorderRPathPoints[0][1],
+        leftBottomY: s3L1LBorderRPathPoints[0][2],
+        rightTopX: s3L1RBorderLPathPoints[0][1],
+        rightTopY: s3L1RBorderLPathPoints[0][2],
+        rightBottomX: s3L1RBorderLPathPoints[1][s3L1RBorderLPathPoints[1].length - 2],
+        rightBottomY: s3L1RBorderLPathPoints[1][s3L1RBorderLPathPoints[1].length - 1]
+    });
+
+    // 第二层——左杯壁
+    var s3L2LBorderLPathStr = s2LBorderLPath.getSubpath((layer1Height + layerGapHeight) / funnelHeiht * len1, (layer1Height + layerGapHeight + layer2Height) / funnelHeiht * len1);
+    var s3L2LBorderLPathPoints = Snap.parsePathString(s3L2LBorderLPathStr);
+    var s3L2LBorderPoint1 = s3L2LBorderLPathPoints[0][1] + ','
+            + s3L2LBorderLPathPoints[0][2];
+    var s3L2LBorderPoint4 = s3L2LBorderLPathPoints[1][s3L2LBorderLPathPoints[1].length - 2] + ','
+            + s3L2LBorderLPathPoints[1][s3L2LBorderLPathPoints[1].length - 1];
+
+    var s3L2LBorderRPathStr = s2LBorderRPath.getSubpath((1 - (layer1Height + layerGapHeight + layer2Height) / funnelHeiht) * len2, (1 - (layer1Height + layerGapHeight) / funnelHeiht) * len2);
+    var s3L2LBorderRPathPoints = Snap.parsePathString(s3L2LBorderRPathStr);
+    var s3L2LBorderPoint3 = s3L2LBorderRPathPoints[0][1] + ','
+            + s3L2LBorderRPathPoints[0][2];
+    var s3L2LBorderPoint2 = s3L2LBorderRPathPoints[1][s3L2LBorderRPathPoints[1].length - 2] + ','
+            + s3L2LBorderRPathPoints[1][s3L2LBorderRPathPoints[1].length - 1];
+
+    // 第二层——右杯壁
+    var s3L2RBorderLPathStr = s2RBorderLPath.getSubpath((layer1Height + layerGapHeight) / funnelHeiht * len3, (layer1Height + layerGapHeight + layer2Height) / funnelHeiht * len3);
+    var s3L2RBorderLPathPoints = Snap.parsePathString(s3L2RBorderLPathStr);
+    var s3L2RBorderPoint1 = s3L2RBorderLPathPoints[0][1] + ','
+            + s3L2RBorderLPathPoints[0][2];
+    var s3L2RBorderPoint4 = s3L2RBorderLPathPoints[1][s3L2RBorderLPathPoints[1].length - 2] + ','
+            + s3L2RBorderLPathPoints[1][s3L2RBorderLPathPoints[1].length - 1];
+
+    var s3L2RBorderRPathStr = s2RBorderRPath.getSubpath((1 - (layer1Height + layerGapHeight + layer2Height) / funnelHeiht) * len4, (1 - (layer1Height + layerGapHeight) / funnelHeiht) * len4);
+    var s3L2RBorderRPathPoints = Snap.parsePathString(s3L2RBorderRPathStr);
+    var s3L2RBorderPoint3 = s3L2RBorderRPathPoints[0][1] + ','
+            + s3L2RBorderRPathPoints[0][2];
+    var s3L2RBorderPoint2 = s3L2RBorderRPathPoints[1][s3L2RBorderRPathPoints[1].length - 2] + ','
+            + s3L2RBorderRPathPoints[1][s3L2RBorderRPathPoints[1].length - 1];
+
+    // 保存杯壁内部左边
+    borderCoordinate.push({
+        layer: 2,
+        leftTopX: s3L2LBorderRPathPoints[1][s3L2LBorderRPathPoints[1].length - 2],
+        leftTopY: s3L2LBorderRPathPoints[1][s3L2LBorderRPathPoints[1].length - 1],
+        leftBottomX: s3L2LBorderRPathPoints[0][1],
+        leftBottomY: s3L2LBorderRPathPoints[0][2],
+        rightTopX: s3L2RBorderLPathPoints[0][1],
+        rightTopY: s3L2RBorderLPathPoints[0][2],
+        rightBottomX: s3L2RBorderLPathPoints[1][s3L2RBorderLPathPoints[1].length - 2],
+        rightBottomY: s3L2RBorderLPathPoints[1][s3L2RBorderLPathPoints[1].length - 1]
+    });
+
+    // 第三层——左杯壁
+    var s3L3LBorderLPathStr = s2LBorderLPath.getSubpath((layer1Height + layerGapHeight + layer2Height + layerGapHeight) / funnelHeiht * len1, len1);
+    var s3L3LBorderLPathPoints = Snap.parsePathString(s3L3LBorderLPathStr);
+    var s3L3LBorderPoint1 = s3L3LBorderLPathPoints[0][1] + ','
+            + s3L3LBorderLPathPoints[0][2];
+    var s3L3LBorderPoint4 = s3L3LBorderLPathPoints[1][s3L3LBorderLPathPoints[1].length - 2] + ','
+            + s3L3LBorderLPathPoints[1][s3L3LBorderLPathPoints[1].length - 1];
+
+    var s3L3LBorderRPathStr = s2LBorderRPath.getSubpath(0, (1 - (layer1Height + layerGapHeight + layer2Height + layerGapHeight) / funnelHeiht) * len2);
+    var s3L3LBorderRPathPoints = Snap.parsePathString(s3L3LBorderRPathStr);
+    var s3L3LBorderPoint3 = s3L3LBorderRPathPoints[0][1] + ','
+            + s3L3LBorderRPathPoints[0][2];
+    var s3L3LBorderPoint2 = s3L3LBorderRPathPoints[1][s3L3LBorderRPathPoints[1].length - 2] + ','
+            + s3L3LBorderRPathPoints[1][s3L3LBorderRPathPoints[1].length - 1];
+
+    // 第三层——右杯壁
+    var s3L3RBorderLPathStr = s2RBorderLPath.getSubpath((layer1Height + layerGapHeight + layer2Height + layerGapHeight) / funnelHeiht * len3, len3);
+    var s3L3RBorderLPathPoints = Snap.parsePathString(s3L3RBorderLPathStr);
+    var s3L3RBorderPoint1 = s3L3RBorderLPathPoints[0][1] + ','
+            + s3L3RBorderLPathPoints[0][2];
+    var s3L3RBorderPoint4 = s3L3RBorderLPathPoints[1][s3L3RBorderLPathPoints[1].length - 2] + ','
+            + s3L3RBorderLPathPoints[1][s3L3RBorderLPathPoints[1].length - 1];
+
+    var s3L3RBorderRPathStr = s2RBorderRPath.getSubpath(0, (1 - (layer1Height + layerGapHeight + layer2Height + layerGapHeight) / funnelHeiht) * len4);
+    var s3L3RBorderRPathPoints = Snap.parsePathString(s3L3RBorderRPathStr);
+    var s3L3RBorderPoint3 = s3L3RBorderRPathPoints[0][1] + ','
+            + s3L3RBorderRPathPoints[0][2];
+    var s3L3RBorderPoint2 = s3L3RBorderRPathPoints[1][s3L3RBorderRPathPoints[1].length - 2] + ','
+            + s3L3RBorderRPathPoints[1][s3L3RBorderRPathPoints[1].length - 1];
+
+    // 保存杯壁内部左边
+    borderCoordinate.push({
+        layer: 3,
+        leftTopX: s3L3LBorderRPathPoints[1][s3L3LBorderRPathPoints[1].length - 2],
+        leftTopY: s3L3LBorderRPathPoints[1][s3L3LBorderRPathPoints[1].length - 1],
+        leftBottomX: s3L3LBorderRPathPoints[0][1],
+        leftBottomY: s3L3LBorderRPathPoints[0][2],
+        rightTopX: s3L3RBorderLPathPoints[0][1],
+        rightTopY: s3L3RBorderLPathPoints[0][2],
+        rightBottomX: s3L3RBorderLPathPoints[1][s3L3RBorderLPathPoints[1].length - 2],
+        rightBottomY: s3L3RBorderLPathPoints[1][s3L3RBorderLPathPoints[1].length - 1]
+    });
+
+
+    var s3 = Snap("#svg3");
+
+    /*
+     *********************************** 设置一些常量 begin ************************************
+     */
+    var channelGapLength = 5;            // 各渠道图形之间的间隙
+
+    var colorBorder = '#999999';        // 杯壁颜色
+    var colorL1Default = '#FFFF99';     // 第一层默认颜色
+    var colorL2Default = '#99FF99';     // 第二层默认颜色
+    var colorL3Default = '#66CCFF';     // 第三层默认颜色
+
+    var colorsL1Active = ['#66CCFF', '#99FF99', '#FFFF99'];    // 第一层动画状态下颜色数组
+    var colorsL2Active = ['#66CCFF', '#99FF99', '#FFFF99'];    // 第二层动画状态下颜色数组
+    var colorsL3Active = ['#66CCFF', '#99FF99', '#FFFF99'];    // 第三层动画状态下颜色数组
+
+    var arrowHSet1 = Snap.set();                    // 箭头——水平分组1
+    var arrowHSet2 = Snap.set();                    // 箭头——水平分组2
+
+    var arrowVSet1 = Snap.set();                    // 箭头——垂直分组1
+    var arrowVSet2 = Snap.set();                    // 箭头——垂直分组2
+    var arrowVSet3 = Snap.set();                    // 箭头——垂直分组3
+
+    var flag_App = true;
+    var flag_WeiXin = true;
+    var flag_Network = true;
+
+    /*
+     *********************************** 设置一些常量 end ************************************
+     */
+
+
+    // 绘制杯壁 begin
+
+    // 杯壁左1
+    var pathLeftBorder1 = s3.paper.path(s3L1LBorderLPathStr + "L" + s3L1LBorderPoint3 + s3L1LBorderRPathStr + "L" + s3L1LBorderPoint1).attr({
+        fill: colorBorder
+    });
+
+    // 杯壁左2
+    var pathLeftBorder2 = s3.paper.path(s3L2LBorderLPathStr + "L" + s3L2LBorderPoint3 + s3L2LBorderRPathStr + "L" + s3L2LBorderPoint1).attr({
+        fill: colorBorder
+    });
+
+    // 杯壁左3
+    var pathLeftBorder3 = s3.paper.path(s3L3LBorderLPathStr + "L" + s3L3LBorderPoint3 + s3L3LBorderRPathStr + "L" + s3L3LBorderPoint1).attr({
+        fill: colorBorder
+    });
+
+    // 杯壁右1
+    var pathRightBorder1 = s3.paper.path(s3L1RBorderLPathStr + "L" + s3L1RBorderPoint3 + s3L1RBorderRPathStr + "L" + s3L1RBorderPoint1).attr({
+        fill: colorBorder
+    });
+
+    // 杯壁右2
+    var pathRightBorder2 = s3.paper.path(s3L2RBorderLPathStr + "L" + s3L2RBorderPoint3 + s3L2RBorderRPathStr + "L" + s3L2RBorderPoint1).attr({
+        fill: colorBorder
+    });
+
+    // 杯壁右3
+    var pathRightBorder3 = s3.paper.path(s3L3RBorderLPathStr + "L" + s3L3RBorderPoint3 + s3L3RBorderRPathStr + "L" + s3L3RBorderPoint1).attr({
+        fill: colorBorder
+    });
+    // 绘制杯壁 end
+
+
+    // 填充各渠道图形 begin
+
+    // 各分渠道测试数据
+    var channelsData = [
+        [1000, 1200, 600],
+        [600, 800, 300],
+        [300, 500, 200]
+    ];
+
+    /*
+     *************************** 第一层  l1 = layer1 **********************
+     */
+    // TODO: 分渠道为0的处理
+    var l1ChannelTotal = channelsData[0][0] + channelsData[0][1] + channelsData[0][2];   // 第一层数据总和
+    var l1Height = borderCoordinate[0].leftBottomY - borderCoordinate[0].leftTopY;      // 第一层的高度
+
+    var l1ChannelAppRate;                      // 分渠道APP占比
+    var l1ChannelWeiXinRate;                  // 分渠道微信占比
+    var l1ChannelNetworkRate;                 // 分渠道网络占比
+
+    if (l1ChannelTotal === 0) {
+        l1ChannelAppRate = 0;
+        l1ChannelWeiXinRate = 0;
+        l1ChannelNetworkRate = 0;
+    } else {
+        l1ChannelAppRate = channelsData[0][0] / l1ChannelTotal;
+        l1ChannelWeiXinRate = channelsData[0][1] / l1ChannelTotal;
+        l1ChannelNetworkRate = channelsData[0][2] / l1ChannelTotal;
+    }
+
+    // 第一层总宽度（以上面的坐标计算）
+    var layer1ChannelCount = 0;                           // 分渠道数据中有多少个是0的，影响杯壁内分渠道图形的生成
+    for (var i = 0; i < channelsData[0].length; i++) {
+        if (channelsData[0][i] > 0) {
+            layer1ChannelCount++;
+        }
+    }
+    if (layer1ChannelCount === 0) {
+        layer1ChannelCount = 1;
+    }
+    var l1TopWidth = borderCoordinate[0].rightTopX - borderCoordinate[0].leftTopX
+            - channelGapLength * (layer1ChannelCount - 1);
+
+    // 第一层 app 图形绘制
+    var l1AppWidth = l1ChannelAppRate * l1TopWidth;     // 分渠道APP图形的宽度
+    var l1AppPath = s3.paper.path(s3L1LBorderRPathStr + "l" + l1AppWidth + ",0l0," + l1Height + "Z").attr({
+        fill: colorL1Default
+    });
+    // 显示分渠道数值
+    var l1AppTextX = l1AppPath.getBBox().x + l1AppWidth / 2 - 10;
+    var l1AppTextY = (30 + l1Height) / 2 + 10;
+    var text_l1App = s3.paper.text(l1AppTextX, l1AppTextY + 20, Math.round(l1ChannelAppRate * 100) + '%');
+
+
+    // 第一层 weixin 图形绘制
+    var l1WeiXinWidth = l1ChannelWeiXinRate * l1TopWidth;
+    var l1WeiXinMX = l1AppPath.getBBox().x + l1AppWidth + 5;
+    var l1WeiXinPath = s3.paper.path("M" + l1WeiXinMX + "," + borderCoordinate[0].leftTopY
+            + "l" + l1WeiXinWidth + ",0l0," + l1Height + "l" + (l1WeiXinWidth * -1) + ",0Z").attr({
+        fill: colorL1Default
+    });
+    // 显示分渠道数值
+    var l1WeiXinTextX = l1WeiXinPath.getBBox().x + l1WeiXinWidth / 2 - 10;
+    var l1WeiXinTextY = (30 + l1Height) / 2 + 10;
+    var text_l1WeiXin = s3.paper.text(l1WeiXinTextX, l1WeiXinTextY + 20, Math.round(l1ChannelWeiXinRate * 100) + '%');
+
+    // 第一层 network 图形绘制
+    var l1NetworkWidth = l1ChannelNetworkRate * l1TopWidth;
+    var l1NetworkMX = l1WeiXinPath.getBBox().x + l1WeiXinWidth + 5;
+    var l1NetworkPath = s3.paper.path(s3L1RBorderLPathStr +
+            "L" + l1NetworkMX + "," + borderCoordinate[0].leftBottomY +
+            "l0," + l1Height * -1 + "Z").attr({
+        fill: colorL1Default
+    });
+    // 显示分渠道数值
+    var l1NetworkTextX = l1NetworkPath.getBBox().x + l1NetworkWidth / 2 - 10;
+    var l1NetworkTextY = (30 + l1Height) / 2 + 10;
+    var text_l1Network = s3.paper.text(l1NetworkTextX, l1NetworkTextY + 20, Math.round(l1ChannelNetworkRate * 100) + '%');
+
+//    var l1ChannelTextSet = Snap.set(text_l1App, text_l1WeiXin, text_l1Network);
+
+    // 杯壁鼠标事件
+    var onMouseOver_Layer1Border = function () {
+        l1AppPath.animate({
+            fill: colorsL1Active[0]
+        }, borderAnInterval);
+        l1WeiXinPath.animate({
+            fill: colorsL1Active[1]
+        }, borderAnInterval);
+        l1NetworkPath.animate({
+            fill: colorsL1Active[2]
+        }, borderAnInterval);
+    };
+
+    var onMouseOut_Layer1Border = function () {
+        l1AppPath.animate({
+            fill: colorL1Default
+        }, borderAnInterval);
+        l1WeiXinPath.animate({
+            fill: colorL1Default
+        }, borderAnInterval);
+        l1NetworkPath.animate({
+            fill: colorL1Default
+        }, borderAnInterval);
+    };
+
+    pathLeftBorder1.hover((function(){
+        hideAllContent();
+        stopLayerAnimation();
+        layer1AnimateSet.animate({
+            opacity: 1
+        }, borderAnInterval);
+        onMouseOver_Layer1Border();
+    }),function(){
+        hideAllContent();
+        startLayerAnimation();
+        onMouseOut_Layer1Border();
+    });
+    pathRightBorder1.hover((function(){
+        hideAllContent();
+        stopLayerAnimation();
+        layer1AnimateSet.animate({
+            opacity: 1
+        }, borderAnInterval);
+        onMouseOver_Layer1Border();
+    }),function(){
+        hideAllContent();
+        startLayerAnimation();
+        onMouseOut_Layer1Border();
+    });
+
+
+    /*
+     ******************       第二层  l2 = layer2      ******************
+     */
+    var l2ChannelTotal = channelsData[1][0] + channelsData[1][1] + channelsData[1][2];
+    var l2Height = borderCoordinate[1].leftBottomY - borderCoordinate[1].leftTopY;
+
+    var l2ChannelAppRate;                      // 分渠道APP占比
+    var l2ChannelWeiXinRate;                  // 分渠道微信占比
+    var l2ChannelNetworkRate;                 // 分渠道网络占比
+
+    if (l2ChannelTotal === 0) {
+        l2ChannelAppRate = 0;
+        l2ChannelWeiXinRate = 0;
+        l2ChannelNetworkRate = 0;
+    } else {
+        l2ChannelAppRate = channelsData[1][0] / l2ChannelTotal;
+        l2ChannelWeiXinRate = channelsData[1][1] / l2ChannelTotal;
+        l2ChannelNetworkRate = channelsData[1][2] / l2ChannelTotal;
+    }
+    // 第二层总宽度（以上面的坐标计算）
+    var layer2ChannelCount = 0;                           // 分渠道数据中有多少个是0的，影响杯壁内分渠道图形的生成
+    for (var i = 0; i < channelsData[1].length; i++) {
+        if (channelsData[1][i] > 0) {
+            layer2ChannelCount++;
+        }
+    }
+    if (layer2ChannelCount === 0) {
+        layer2ChannelCount = 1;
+    }
+    var l2TopWidth = borderCoordinate[1].rightTopX - borderCoordinate[1].leftTopX
+            - channelGapLength * (layer2ChannelCount - 1);
+
+    // 第二层 app 图形绘制
+    var l2AppWidth = l2ChannelAppRate * l2TopWidth;     // 分渠道APP图形的宽度
+    var l2AppPath = s3.paper.path(s3L2LBorderRPathStr + "l" + l2AppWidth + ",0l0," + l2Height + "Z").attr({
+        fill: colorL2Default
+    });
+    // 显示分渠道数值
+    var l2AppTextX = l2AppPath.getBBox().x + l2AppWidth / 2 - 10;
+    var l2AppTextY = (borderCoordinate[1].leftTopY + l2Height / 2) - 10;
+    var text_l2App = s3.paper.text(l2AppTextX, l2AppTextY + 20, Math.round(l2ChannelAppRate * 100) + '%');
+
+    // 第二层 weixin 图形绘制
+    var l2WeiXinWidth = l2ChannelWeiXinRate * l2TopWidth;
+    var l2WeiXinMX = l2AppPath.getBBox().x + l2AppWidth + 5;
+    var l2WeiXinPath = s3.paper.path("M" + l2WeiXinMX + "," + borderCoordinate[1].leftTopY
+            + "l" + l2WeiXinWidth + ",0l0," + l2Height + "l" + (l2WeiXinWidth * -1) + ",0Z").attr({
+        fill: colorL2Default
+    });
+    // 显示分渠道数值
+    var l2WeiXinTextX = l2WeiXinPath.getBBox().x + l2WeiXinWidth / 2 - 10;
+    var l2WeiXinTextY = (borderCoordinate[1].leftTopY + l2Height / 2) - 10;
+    var text_l2WeiXin = s3.paper.text(l2WeiXinTextX, l2WeiXinTextY + 20, Math.round(l2ChannelWeiXinRate * 100) + '%');
+
+    // 第二层 network 图形绘制
+    var l2NetworkWidth = l2ChannelNetworkRate * l2TopWidth;
+    var l2NetworkMX = l2WeiXinPath.getBBox().x + l2WeiXinWidth + 5;
+    var l2NetworkPath = s3.paper.path(s3L2RBorderLPathStr +
+            "L" + l2NetworkMX + "," + borderCoordinate[1].leftBottomY +
+            "l0," + l2Height * -1 + "Z").attr({
+        fill: colorL2Default
+    });
+    // 显示分渠道数值
+    var l2NetworkTextX = l2NetworkPath.getBBox().x + l2NetworkWidth / 2 - 10;
+    var l2NetworkTextY = (borderCoordinate[1].leftTopY + l2Height / 2) - 10;
+    var text_l2Network = s3.paper.text(l2NetworkTextX, l2NetworkTextY + 20, Math.round(l2ChannelNetworkRate * 100) + '%');
+
+    var l2ChannelTextSet = Snap.set(text_l2App, text_l2WeiXin, text_l2Network);
+
+    // 杯壁鼠标事件
+    var onMouseOver_Layer2Border = function () {
+        l2AppPath.animate({
+            fill: colorsL2Active[0]
+        }, borderAnInterval);
+        l2WeiXinPath.animate({
+            fill: colorsL2Active[1]
+        }, borderAnInterval);
+        l2NetworkPath.animate({
+            fill: colorsL2Active[2]
+        }, borderAnInterval);
+    };
+
+    var onMouseOut_Layer2Border = function () {
+        l2AppPath.animate({
+            fill: colorL2Default
+        }, borderAnInterval);
+        l2WeiXinPath.animate({
+            fill: colorL2Default
+        }, borderAnInterval);
+        l2NetworkPath.animate({
+            fill: colorL2Default
+        }, borderAnInterval);
+    };
+
+    pathLeftBorder2.hover(function(){
+        hideAllContent();
+        stopLayerAnimation();
+        layer2AnimateSet.animate({
+            opacity: 1
+        }, borderAnInterval);
+        onMouseOver_Layer2Border();
+    },function(){
+        hideAllContent();
+        startLayerAnimation();
+        onMouseOut_Layer2Border();
+    });
+
+    pathRightBorder2.hover(function(){
+        hideAllContent();
+        stopLayerAnimation();
+        layer2AnimateSet.animate({
+            opacity: 1
+        }, borderAnInterval);
+        onMouseOver_Layer2Border();
+    },function(){
+        startLayerAnimation();
+        hideAllContent();
+        onMouseOut_Layer2Border();
+    });
+
+
+
+    /*
+     ******************       第三层  l3 = layer3      ******************
+     */
+    var l3ChannelTotal = channelsData[2][0] + channelsData[2][1] + channelsData[2][2];
+    var l3Height = borderCoordinate[2].leftBottomY - borderCoordinate[2].leftTopY;
+
+    var l3ChannelAppRate;                      // 分渠道APP占比
+    var l3ChannelWeiXinRate;                  // 分渠道微信占比
+    var l3ChannelNetworkRate;                 // 分渠道网络占比
+
+    if (l3ChannelTotal === 0) {
+        l3ChannelAppRate = 0;
+        l3ChannelWeiXinRate = 0;
+        l3ChannelNetworkRate = 0;
+    } else {
+        l3ChannelAppRate = channelsData[2][0] / l3ChannelTotal;
+        l3ChannelWeiXinRate = channelsData[2][1] / l3ChannelTotal;
+        l3ChannelNetworkRate = channelsData[2][2] / l3ChannelTotal;
+    }
+    // 第3层总宽度（以上面的坐标计算）
+    var layer3ChannelCount = 0;                           // 分渠道数据中有多少个是0的，影响杯壁内分渠道图形的生成
+    for (var i = 0; i < channelsData[2].length; i++) {
+        if (channelsData[2][i] > 0) {
+            layer3ChannelCount++;
+        }
+    }
+    if (layer3ChannelCount === 0) {
+        layer3ChannelCount = 1;
+    }
+    var l3TopWidth = borderCoordinate[2].rightTopX - borderCoordinate[2].leftTopX
+            - channelGapLength * (layer3ChannelCount - 1);
+
+    // 第3层 app 图形绘制
+    var l3AppWidth = l3ChannelAppRate * l3TopWidth;     // 分渠道APP图形的宽度
+    var l3AppPath = s3.paper.path(s3L3LBorderRPathStr + "l" + l3AppWidth + ",0l0," + l3Height + "Z").attr({
+        fill: colorL3Default
+    });
+
+    // 第3层 weixin 图形绘制
+    var l3WeiXinWidth = l3ChannelWeiXinRate * l3TopWidth;
+    var l3WeiXinMX = l3AppPath.getBBox().x + l3AppWidth + 5;
+    var l3WeiXinPath = s3.paper.path("M" + l3WeiXinMX + "," + borderCoordinate[2].leftTopY
+            + "l" + l3WeiXinWidth + ",0l0," + l3Height + "l" + (l3WeiXinWidth * -1) + ",0Z").attr({
+        fill: colorL3Default
+    });
+
+    // 第3层 network 图形绘制
+    var l3NetworkWidth = l3ChannelNetworkRate * l3TopWidth;
+    var l3NetworkMX = l3WeiXinPath.getBBox().x + l3WeiXinWidth + 5;
+    var l3NetworkPath = s3.paper.path(s3L3RBorderLPathStr +
+            "L" + l3NetworkMX + "," + borderCoordinate[2].leftBottomY +
+            "l0," + l3Height * -1 + "Z").attr({
+        fill: colorL3Default
+    });
+
+
+    // 杯壁鼠标事件
+    var onMouseOver_Layer3Border = function () {
+        l3AppPath.animate({
+            fill: colorsL3Active[0]
+        }, borderAnInterval);
+        l3WeiXinPath.animate({
+            fill: colorsL3Active[1]
+        }, borderAnInterval);
+        l3NetworkPath.animate({
+            fill: colorsL3Active[2]
+        }, borderAnInterval);
+    };
+
+    var onMouseOut_Layer3Border = function () {
+        l3AppPath.animate({
+            fill: colorL3Default
+        }, borderAnInterval);
+        l3WeiXinPath.animate({
+            fill: colorL3Default
+        }, borderAnInterval);
+        l3NetworkPath.animate({
+            fill: colorL3Default
+        }, borderAnInterval);
+    };
+
+    // 事件：鼠标移入
+    pathLeftBorder3.hover(function () {
+                hideAllContent();
+                stopLayerAnimation();
+                layer3AnimateSet.animate({
+                    opacity: 1
+                }, borderAnInterval);
+                onMouseOver_Layer3Border();
+            },function () {
+                hideAllContent();
+                startLayerAnimation();
+                onMouseOut_Layer3Border();
+            }
+    );
+
+    pathRightBorder3.hover(function () {
+                hideAllContent();
+                stopLayerAnimation();
+                layer3AnimateSet.animate({
+                    opacity: 1
+                }, borderAnInterval);
+                onMouseOver_Layer3Border();
+            },function () {
+                hideAllContent();
+                startLayerAnimation();
+                onMouseOut_Layer3Border();
+            }
+    );
+    // 事件：鼠标移开
+    //    pathLeftBorder3.mouseout();
+    //    pathRightBorder3.mouseout();
+
+
+    /*
+     **************      分渠道各层数据          ********************
+     */
+
+
+    // 显示分渠道数值
+    var l3AppTextX = l3AppPath.getBBox().x + l3AppWidth / 2 - 10;
+    var l3AppTextY = (borderCoordinate[2].leftTopY + l3Height / 2) - 10;
+    var text_l3App = s3.paper.text(l3AppTextX, l3AppTextY + 20, Math.round(l3ChannelAppRate * 100) + '%');
+    // 显示分渠道数值
+    var l3WeiXinTextX = l3WeiXinPath.getBBox().x + l3WeiXinWidth / 2 - 10;
+    var l3WeiXinTextY = (borderCoordinate[2].leftTopY + l3Height / 2) - 10;
+    var text_l3WeiXin = s3.paper.text(l3WeiXinTextX, l3WeiXinTextY + 20, Math.round(l3ChannelWeiXinRate * 100) + '%');
+    // 显示分渠道数值
+    var l3NetworkTextX = l3NetworkPath.getBBox().x + l3NetworkWidth / 2 - 10;
+    var l3NetworkTextY = (borderCoordinate[2].leftTopY + l3Height / 2) - 10;
+    var text_l3Network = s3.paper.text(l3NetworkTextX, l3NetworkTextY + 20, Math.round(l3ChannelNetworkRate * 100) + '%');
+
+    var l3ChannelTextSet = Snap.set(text_l3App, text_l3WeiXin, text_l3Network);
+    /*
+     **************      分渠道图标          ********************
+     */
+    var iconAPP;
+    Snap.load("./assets/svg/iconfont-shouji.svg", function (f) {
+        iconAPP = f.selectAll("svg")[0].attr({
+            x: 80,
+            y: 7,
+            height: 36,
+            width: 36,
+            cursor: 'pointer',
+            'pointer-events': 'none'
+        });
+        s3.append(iconAPP);
+    });
+    s3.paper.rect(80, 7, 36, 36).attr({fill: 'Transparent', cursor: 'pointer'}).click(iconAppClick);
+    function iconAppClick() {
+        flag_App = !flag_App;
+        if (flag_App) {
+            iconAPP.selectAll('path')[0].attr({fill: '#56abe4'});
+        } else {
+            iconAPP.selectAll('path')[0].attr({fill: '#999999'});
+        }
+        console.log(1);
+        return false;
+    }
+
+    var iconWeiXin;
+    Snap.load("./assets/svg/iconfont-weixin.svg", function (f) {
+        iconWeiXin = f.selectAll("svg")[0].attr({
+            x: 200,
+            y: 7,
+            height: 36,
+            width: 36,
+            cursor: 'pointer',
+            'pointer-events': 'none'
+        });
+        s3.append(iconWeiXin);
+    });
+
+    s3.paper.rect(200, 7, 36, 36).attr({fill: 'Transparent', cursor: 'pointer'}).click(iconWeiXinClick);
+    function iconWeiXinClick() {
+        flag_WeiXin = !flag_WeiXin;
+        if (flag_WeiXin) {
+            iconWeiXin.selectAll('path')[0].attr({fill: '#11cd6e'});
+        } else {
+            iconWeiXin.selectAll('path')[0].attr({fill: '#999999'});
+        }
+        return false;
+    }
+
+
+    var iconNetwork;
+    Snap.load("./assets/svg/iconfont-wangluo.svg", function (f) {
+        iconNetwork = f.selectAll("svg")[0].attr({
+            x: 310,
+            y: 7,
+            height: 36,
+            width: 36,
+            cursor: 'pointer',
+            'pointer-events': 'none'
+        });
+        s3.append(iconNetwork);
+    });
+    s3.paper.rect(310, 7, 36, 36).attr({fill: 'Transparent', cursor: 'pointer'}).click(iconNetworkClick);
+
+    function iconNetworkClick() {
+        flag_Network = !flag_Network;
+        if (flag_Network) {
+            iconNetwork.selectAll('path')[0].attr({fill: '#ea8010'});
+        } else {
+            iconNetwork.selectAll('path')[0].attr({fill: '#999999'});
+        }
+        return false;
+    }
+
+    //    var iconWeiXin = s3.paper.image('./assets/svg/iconfont-weixin.svg', 200, 7, 32, 32);
+    //
+    //    var iconNetwork = s3.paper.image('./assets/svg/iconfont-wangluo.svg', 310, 7, 32, 32);
+
+    // TODO: 图标点击事件
+
+
+    /*
+     **************      箭头和数值显示 defs          ********************
+     */
+    //    var channelTransformGroup = s3.paper.g();
+    //    var
+
+    var svg3_arrow_transformRate = Snap('#svg3_arrow_transformRate');
+
+    var svg3_arrow_transformRate_1 = svg3_arrow_transformRate.use();
+    svg3_arrow_transformRate_1.attr({
+        x: 320,
+        y: 75
+    });
+    s3.append(svg3_arrow_transformRate_1);
+
+    var svg3_text_transformRate_1 = s3.paper.text(390, 120, '转化');
+    var svg3_text_transformRate_2 = s3.paper.text(390, 140, '80%');
+
+
+    var svg3_arrow_transformRate_2 = svg3_arrow_transformRate.use();
+    svg3_arrow_transformRate_2.attr({
+        x: 300,
+        y: 220
+    });
+
+    s3.append(svg3_arrow_transformRate_2);
+
+    var svg3_text_transformRate_3 = s3.paper.text(375, 265, '转化');
+    var svg3_text_transformRate_4 = s3.paper.text(375, 285, '80%');
+
+
+    /*
+     **************      指标转化占比 defs          ********************
+     */
+
+    var arrow_channelTransform1 = arrowG.use();
+    arrow_channelTransform1.attr({x: 100, y: 70});
+    s3.append(arrow_channelTransform1);
+
+
+    var arrow_channelTransform2 = arrowG.use();
+    arrow_channelTransform2.attr({x: 200, y: 70});
+    s3.append(arrow_channelTransform2);
+    var arrow_channelTransform3 = arrowG.use();
+    arrow_channelTransform3.attr({x: 300, y: 70});
+    s3.append(arrow_channelTransform3);
+    var arrow_channelTransform4 = arrowG.use();
+    arrow_channelTransform4.attr({x: 110, y: 220});
+    s3.append(arrow_channelTransform4);
+    var arrow_channelTransform5 = arrowG.use();
+    arrow_channelTransform5.attr({x: 200, y: 220});
+    s3.append(arrow_channelTransform5);
+    var arrow_channelTransform6 = arrowG.use();
+    arrow_channelTransform6.attr({x: 285, y: 220});
+    s3.append(arrow_channelTransform6);
+
+    var infoRect_channelTransform = s3.paper.rect(0, 0, 45, 38, 5, 5).attr({
+        fill: '#FFFFFF',
+        opacity: 0.95
+    }).toDefs();
+
+    var infoRect_channelTransform1 = infoRect_channelTransform.use();
+    infoRect_channelTransform1.attr({
+        x: 120,
+        y: 90
+    });
+    s3.append(infoRect_channelTransform1);
+    var text1_channelTransform1 = s3.paper.text(125, 107, '转化');
+    var text2_channelTransform1 = s3.paper.text(125, 125, '70%');
+    var channelTransformG1 = s3.paper.g(arrow_channelTransform1, infoRect_channelTransform1, text1_channelTransform1, text2_channelTransform1);
+
+    var infoRect_channelTransform2 = infoRect_channelTransform.use();
+    infoRect_channelTransform2.attr({
+        x: 220,
+        y: 90
+    });
+    s3.append(infoRect_channelTransform2);
+    var text1_channelTransform2 = s3.paper.text(225, 107, '转化');
+    var text2_channelTransform2 = s3.paper.text(225, 125, '70%');
+    var channelTransformG2 = s3.paper.g(arrow_channelTransform2, infoRect_channelTransform2, text1_channelTransform2, text2_channelTransform2);
+
+
+    var infoRect_channelTransform3 = infoRect_channelTransform.use();
+    infoRect_channelTransform3.attr({
+        x: 320,
+        y: 90
+    });
+    s3.append(infoRect_channelTransform3);
+    var text1_channelTransform3 = s3.paper.text(325, 107, '转化');
+    var text2_channelTransform3 = s3.paper.text(325, 125, '70%');
+    var channelTransformG3 = s3.paper.g(arrow_channelTransform3, infoRect_channelTransform3, text1_channelTransform3, text2_channelTransform3);
+
+    var infoRect_channelTransform4 = infoRect_channelTransform.use();
+    infoRect_channelTransform4.attr({
+        x: 130,
+        y: 230
+    });
+    s3.append(infoRect_channelTransform4);
+    var text1_channelTransform4 = s3.paper.text(135, 247, '转化');
+    var text2_channelTransform4 = s3.paper.text(135, 265, '70%');
+    var channelTransformG4 = s3.paper.g(arrow_channelTransform4, infoRect_channelTransform4, text1_channelTransform4, text2_channelTransform4);
+
+    var infoRect_channelTransform5 = infoRect_channelTransform.use();
+    infoRect_channelTransform5.attr({
+        x: 220,
+        y: 230
+    });
+    s3.append(infoRect_channelTransform5);
+    var text1_channelTransform5 = s3.paper.text(225, 247, '转化');
+    var text2_channelTransform5 = s3.paper.text(225, 265, '70%');
+    var channelTransformG5 = s3.paper.g(arrow_channelTransform5, infoRect_channelTransform5, text1_channelTransform5, text2_channelTransform5);
+
+
+    var infoRect_channelTransform6 = infoRect_channelTransform.use();
+    infoRect_channelTransform6.attr({
+        x: 305,
+        y: 230
+    });
+    s3.append(infoRect_channelTransform6);
+    var text1_channelTransform6 = s3.paper.text(310, 247, '转化');
+    var text2_channelTransform6 = s3.paper.text(310, 265, '70%');
+    var channelTransformG6 = s3.paper.g(arrow_channelTransform6, infoRect_channelTransform6, text1_channelTransform6, text2_channelTransform6);
+
+
+    //    var layer1AG = Snap.set(ag1, ag2, ag3);
+    // TODO: 动画操作处理
+
+    //
+    //    var infoRect = s2.paper.rect(20, 38, 45, 38, 5, 5).attr({
+    //        fill: '#FFFFFF',
+    //        opacity: 0.95
+    //    });
+    //    var text1 = s2.paper.text(25, 55, '转化');
+    //    var text2 = s2.paper.text(25, 72, '70%');
+    //    var textG = s2.paper.g(infoRect, text1, text2);
+
+
+    /*
+     **************      10086转化占比 defs          ********************
+     */
+
+
+    /*
+     **************      层次流转动画   begin         ********************
+     */
+
+    var layer1AnimateSet = Snap.set(text_l1App, text_l1WeiXin, text_l1Network, svg3_arrow_transformRate_1, svg3_text_transformRate_1, svg3_text_transformRate_2, arrow_channelTransform1, infoRect_channelTransform1, text1_channelTransform1, text2_channelTransform1, arrow_channelTransform2, infoRect_channelTransform2, text1_channelTransform2, text2_channelTransform2, arrow_channelTransform3, infoRect_channelTransform3, text1_channelTransform3, text2_channelTransform3);
+    var layer2AnimateSet = Snap.set(text_l2App, text_l2WeiXin, text_l2Network, svg3_arrow_transformRate_2, svg3_text_transformRate_3, svg3_text_transformRate_4, arrow_channelTransform4, infoRect_channelTransform4, text1_channelTransform4, text2_channelTransform4, arrow_channelTransform5, infoRect_channelTransform5, text1_channelTransform5, text2_channelTransform5, arrow_channelTransform6, infoRect_channelTransform6, text1_channelTransform6, text2_channelTransform6);
+    var layer3AnimateSet = Snap.set(text_l3App, text_l3WeiXin, text_l3Network);
+
+    layer1AnimateSet.attr({opacity: 0});
+    layer2AnimateSet.attr({opacity: 0});
+    layer3AnimateSet.attr({opacity: 0});
+
+    // 指标层次流转
+    function layerFlowAnimation() {
+        flag_layerAnimation = true;
+        // TODO: 是否进行动画的判断
+
+        setTimeout(function () {
+            if (flag_layerAnimation) {
+                layer1AnimateSet.animate({
+                    opacity: 1
+                }, borderAnInterval);
+                layer2AnimateSet.animate({
+                    opacity: 0
+                }, borderAnInterval);
+                layer3AnimateSet.animate({
+                    opacity: 0
+                }, borderAnInterval);
+                onMouseOut_Layer3Border()
+                onMouseOver_Layer1Border();
+            }
+        }, 2000);
+
+        setTimeout(function () {
+            if (flag_layerAnimation) {
+                layer1AnimateSet.animate({
+                    opacity: 0
+                }, borderAnInterval);
+                layer2AnimateSet.animate({
+                    opacity: 1
+                }, borderAnInterval);
+                layer3AnimateSet.animate({
+                    opacity: 0
+                }, borderAnInterval);
+                onMouseOut_Layer1Border()
+                onMouseOver_Layer2Border();
+            }
+        }, 4000);
+
+        setTimeout(function () {
+            if (flag_layerAnimation) {
+                layer1AnimateSet.animate({
+                    opacity: 0
+                }, borderAnInterval);
+                layer2AnimateSet.animate({
+                    opacity: 0
+                }, borderAnInterval);
+                layer3AnimateSet.animate({
+                    opacity: 1
+                }, borderAnInterval);
+                onMouseOut_Layer2Border()
+                onMouseOver_Layer3Border();
+            }
+        }, 6000);
+    }
+
+    // token
+    var layerAnimationToken = setInterval(layerFlowAnimation, 6500);
+
+    var flag_layerAnimation = true;
+
+    function startLayerAnimation(){
+        if(!layerAnimationToken){
+            layerAnimationToken = setInterval(layerFlowAnimation, 6500);
+        }
+    }
+
+    function stopLayerAnimation() {
+        flag_layerAnimation = false;
+        clearInterval(layerAnimationToken);
+        layerAnimationToken= null;
+    }
+
+    function hideAllContent() {
+        layer1AnimateSet.forEach(function(element, index) {
+            element.stop();
+        });
+        layer2AnimateSet.forEach(function(element, index) {
+            element.stop();
+        });
+        layer3AnimateSet.forEach(function(element, index) {
+            element.stop();
+        });
+        layer1AnimateSet.attr({opacity: 0});
+        layer2AnimateSet.attr({opacity: 0});
+        layer3AnimateSet.attr({opacity: 0});
+    }
+
+    // 分渠道层次流转
+    // TODO: 先将属于各个列的方块放到数组中，遍历绑定
+    function channelAppAnimation() {
+        hideAllContent();
+        stopLayerAnimation();
+
+    }
+
+</script>
+</body>
+</html>
