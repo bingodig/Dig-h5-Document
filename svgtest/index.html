@@ -350,6 +350,8 @@
 
     var font_fill_value = '#6699FF';                // 针对数值text的颜色，如“80%”
     var font_fill_text = '#aaa';                          // 针对文字说明text的颜色，如“转化”
+//    var font_fill_text = 'white';                          // 针对文字说明text的颜色，如“转化”
+    var font_fill_layerConversion_text = '#aaa';                          // 针对文字说明text的颜色，如“转化”
 
     var font_weight_normal = '600';
     var font_weight_value = '700';
@@ -626,6 +628,7 @@
                             .attr({
                                 'font-weight': font_weight_normal,
                                 fill: font_fill_text,
+//                                fill: font_fill_layerConversion_text,
                                 'font-size': font_size_normal,
                                 opacity: opacity,
                                 'pointer-events': 'none'
@@ -724,6 +727,7 @@
                             .attr({
                                 'font-weight': font_weight_normal,
                                 fill: font_fill_text,
+//                                fill: font_fill_layerConversion_text,
                                 'font-size': font_size_normal,
                                 opacity: opacity,
                                 'pointer-events': 'none'
@@ -805,6 +809,7 @@
                             .attr({
                                 'font-weight': font_weight_normal,
                                 fill: font_fill_text,
+//                                fill: font_fill_layerConversion_text,
                                 'font-size': font_size_normal,
                                 opacity: opacity,
                                 'pointer-events': 'none'
@@ -831,6 +836,13 @@
     // 漏斗图三层图形的创建
     function createFunnel(){
         // 停止动画和隐藏元素
+        hideAllContentAndStopAnimation();
+        stopLayerAnimation();
+        if(token_interval_arrowG) {
+            clearInterval(token_interval_arrowG);
+            token_interval_arrowG = null;
+        }
+
 
         // 清空set
 //        layer1AnimSet.clear();
@@ -1229,10 +1241,10 @@
             clearInterval(layerAnimationToken);
             layerAnimationToken = null;
         }
-        if(token_interval_arrowG) {
-            clearInterval(token_interval_arrowG);
-            token_interval_arrowG = null;
-        }
+//        if(token_interval_arrowG) {
+//            clearInterval(token_interval_arrowG);
+//            token_interval_arrowG = null;
+//        }
     }
 
 
@@ -1438,6 +1450,10 @@
     // 定时回收资源，重新初初始化（然并卵）
     function restartInterval() {
         stopLayerAnimation();
+        if(token_interval_arrowG) {
+            clearInterval(token_interval_arrowG);
+            token_interval_arrowG = null;
+        }
         var restartTimeoutToken = setTimeout(function(){
             startLayerAnimation();
             if(restartTimeoutToken){
