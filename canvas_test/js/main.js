@@ -3,7 +3,7 @@
 require.config({
   baseUrl: 'bower_components',
   paths: {
-    jquery: 'jquery/dist/jquery.min'
+    jquery: 'jquery/dist/jquery'
   },
   packages: [
     {
@@ -51,11 +51,16 @@ require(
     var CircleShape = require('zrender/shape/Circle');
     var PathShape = require('zrender/shape/Path');
     var RectangleShape = require('zrender/shape/Rectangle');
+    var TextShape = require('zrender/shape/Text');
+    var PolylineShape = require('zrender/shape/Polyline');
     var Group = require('zrender/Group');
+
+    var color = require('zrender/tool/color');
+    var colorIdx = 0;
 
     // 初始化zrender
     var zr = zrender.init(document.getElementById("canvasEl2"));
-
+    //zr.clear();
     //window.zrPainter = new Painter(zr, new Storage());
     /*
      *********************************** 设置一些常量 begin ************************************
@@ -691,13 +696,15 @@ require(
       createChannelArea(channelsData[0], layer1Paths_arr, colorL1Default, colorsL1Active, opacity_default, 90);
       createChannelArea(channelsData[1], layer2Paths_arr, colorL2Default, colorsL2Active, opacity_default, 230);
       createChannelArea(channelsData[2], layer3Paths_arr, colorL3Default, colorsL3Active, opacity_default);
-
     }
 
     createFunnel();
-    var icon_app;
+
+    /**
+     * 创建按钮元素
+     */
     function createIcons(){
-      icon_app = new PathShape({
+      var icon_app = new PathShape({
         style : {
           path : 'M88.419,7.73H71.581c-0.478,0-0.864,0.387-0.864,0.864v32.812c0,0.476,0.387,0.864,0.864,0.864h16.838          c0.478,0,0.864-0.388,0.864-0.864V8.594C89.283,8.117,88.896,7.73,88.419,7.73z M80,39.68c-0.834,0-1.512-0.678-1.512-1.512          c0-0.834,0.678-1.511,1.512-1.511s1.512,0.677,1.512,1.511C81.512,39.002,80.834,39.68,80,39.68z M87.125,34.498H72.876V10.32h14.248V34.498z',
           color : '#56ABE4',
@@ -765,45 +772,270 @@ require(
 
     createIcons();
 
-    function create10086Els(){
-      var robotTo10086_path1 = new PathShape({
-        style : {
-          path : 'M335,200h30',
-          opacity: opacity_default,
-          strokeColor: font_fill_value,
-          lineCape:'butt',
-          color: 'none',
-          lineWidth: 2
-          //lineCape:'round',
-          //lineCape:'square',
-        }
+
+    var arrow_totalConversion1;
+    var text_totalConversion1;
+    var text_totalConversion2;
+
+    var arrow_totalConversion2;
+    var text_totalConversion3;
+    var text_totalConversion4;
+
+    /**
+     * 创建层次总体转化元素
+     */
+    function createLayerTotalConversionEls(){
+      // 箭头
+      arrow_totalConversion1 = new PathShape({
+        style: {
+          path: 'M387.613,137.498c-4.61,11.659-15.718,18.868-27.556,19.104l-1.027,6.002l-8.769-12.395 l12.391-8.771l-0.964,5.632c7.5-0.81,14.311-5.668,17.22-13.176c0-0.003,0.003-0.009,0.005-0.017 c4.136-10.701-1.198-22.771-11.898-26.919c-0.046-0.017-0.092-0.028-0.139-0.044l5.337-3.782l-4.059-5.735 c0.759,0.228,1.515,0.481,2.266,0.773c15.552,6.027,23.3,23.581,17.275,39.129C387.668,137.366,387.64,137.432,387.613,137.498z',
+          color: '#8CD1FA'
+          //color: arrowColor
+        },
+        hoverable: hoverable_default
       });
-      var robotTo10086_path2 = new PathShape({
+
+      text_totalConversion1 = new TextShape({
         style : {
-          path : 'M365,200h50v-8',
+          x : 390,
+          y : 120,
+          brushType : 'fill',
+          color : font_fill_text,
+          text : '转化',
+          textFont : 'bold 16px verdana',
+          textAlign : 'left',
+          textBaseline : 'inside',
+          opacity: opacity_default
+        },
+        hoverable: hoverable_default
+      });
+
+      text_totalConversion2 = new TextShape({
+        style : {
+          x : 390,
+          y : 140,
+          brushType : 'fill',
+          color : font_fill_value,
+          text : channelsData[0].conversionRate,
+          textFont : 'bold 16px verdana',
+          textAlign : 'left',
+          textBaseline : 'inside',
+          opacity: opacity_default
+        },
+        hoverable: hoverable_default
+      });
+
+      arrow_totalConversion2 = new PathShape({
+        style: {
+          path: 'M362.613,282.498c-4.61,11.659-15.718,18.868-27.556,19.104l-1.027,6.002l-8.769-12.395 l12.391-8.771l-0.964,5.632c7.5-0.81,14.311-5.668,17.22-13.176c0-0.003,0.003-0.009,0.005-0.017 c4.136-10.701-1.198-22.771-11.898-26.919c-0.046-0.017-0.092-0.028-0.139-0.044l5.337-3.782l-4.059-5.735 c0.759,0.228,1.515,0.481,2.266,0.773c15.552,6.027,23.3,23.581,17.275,39.129C362.668,282.366,362.64,282.432,362.613,282.498z',
+          color: '#8CD1FA'
+          //color: arrowColor
+        },
+        hoverable: hoverable_default
+      });
+
+      text_totalConversion3 = new TextShape({
+        style : {
+          x : 365,
+          y : 265,
+          brushType : 'fill',
+          color : font_fill_text,
+          text : '转化',
+          textFont : 'bold 16px verdana',
+          textAlign : 'left',
+          textBaseline : 'inside',
+          opacity: opacity_default
+        },
+        hoverable: hoverable_default
+      });
+
+      text_totalConversion4 = new TextShape({
+        style : {
+          x : 365,
+          y : 285,
+          brushType : 'fill',
+          color : font_fill_value,
+          text : channelsData[1].conversionRate,
+          textFont : 'bold 16px verdana',
+          textAlign : 'left',
+          textBaseline : 'inside',
+          opacity: opacity_default
+        },
+        hoverable: hoverable_default
+      });
+
+      zr.addElement(arrow_totalConversion1);
+      zr.addElement(text_totalConversion1);
+      zr.addElement(text_totalConversion2);
+      zr.addElement(arrow_totalConversion2);
+      zr.addElement(text_totalConversion3);
+      zr.addElement(text_totalConversion4);
+    }
+
+    createLayerTotalConversionEls();
+
+    var robotTo10086_path1;
+    var robotTo10086_path2;
+    var robotTo10086_Title;
+    var robotTo10086_value;
+    var robotTo10086_icon;
+
+    var onlineTo10086_path1;
+    var onlineTo10086_path2;
+    var onlineTo10086_Title;
+    var onlineTo10086_value;
+    var onlineTo10086_icon;
+
+    /**
+     * 创建转10086占比区域的元素
+     */
+    function create10086Els(){
+      robotTo10086_path1 = new PolylineShape({
+        style : {
+          pointList : [[335, 230], [375, 230]],
+          strokeColor : font_fill_value,
+          lineWidth : 2,
           opacity: opacity_default,
-          strokeColor: font_fill_value
-        }
+          lineType : 'dotted'
+        },
+        hoverable: hoverable_default
+      });
+
+      robotTo10086_path2 = new PolylineShape({
+        style : {
+          pointList : [[375, 230], [415, 230], [415, 222]],
+          strokeColor : font_fill_text,
+          lineWidth : 2,
+          opacity: opacity_default
+        },
+        hoverable: hoverable_default
+      });
+
+      robotTo10086_Title = new TextShape({
+        style : {
+          x : 350,
+          y : 220,
+          brushType : 'fill',
+          color : font_fill_text,
+          text : '转10086客户占比',
+          textFont : 'bold 16px verdana',
+          textAlign : 'left',
+          textBaseline : 'inside',
+          opacity: opacity_default
+        },
+        hoverable: hoverable_default
+      });
+
+      robotTo10086_value = new TextShape({
+        style : {
+          x : 415,
+          y : 200,
+          brushType : 'fill',
+          color : font_fill_value,
+          text : channelsData[0].to10086Rate,
+          textFont : 'bold 22px verdana',
+          textAlign : 'left',
+          textBaseline : 'inside',
+          opacity: opacity_default
+        },
+        hoverable: hoverable_default
+      });
+
+      robotTo10086_icon = new PathShape({
+        position: [390, 180],
+        style: {
+          path: 'M4.043,7.081c-1.715,0-3.045-0.132-3.427-0.174c-0.879-0.1-1.511-0.89-1.413-1.767 c0.098-0.875,0.875-1.507,1.767-1.414c3.982,0.437,10.085,0.059,11.151-2.16c0.381-0.795,1.335-1.135,2.135-0.75 c0.797,0.382,1.133,1.337,0.751,2.134C13.32,6.457,7.768,7.081,4.043,7.081z M18.4,5.491c-0.885,0-1.601-0.715-1.601-1.601v-5.513 l-2.138-0.762C14.025-2.611,13.6-3.215,13.6-3.892c0-7.938-6.459-14.4-14.399-14.4c-7.939,0-14.4,6.461-14.4,14.4 c0,0.517-0.249,1.002-0.67,1.303L-16.8-1.927v5.817c0,0.886-0.717,1.601-1.6,1.601S-20,4.776-20,3.891V-2.75 c0-0.518,0.25-1.002,0.67-1.303l0.949-0.676c0.44-9.318,8.157-16.763,17.581-16.763c9.321,0,16.973,7.283,17.564,16.459l2.173,0.774 C19.574-4.03,20-3.428,20-2.75v6.641C20,4.776,19.285,5.491,18.4,5.491z M5.6,12.682v-0.485c1.402-1.094,2.519-2.146,3.185-3.64 c-1.458,0.23-3.08,0.148-4.386,0.148c-1.6,0-2.967,0.044-3.799-0.049C-1.157,8.462-2.423,6.72-2.228,4.963 c0.195-1.758,1.792-3.032,3.533-2.827c3.563,0.383,7.489-0.033,9.063-0.7c0.067-1.461,0.049-3.002,0.049-4.173 c0-6.847-4.164-10.909-10.837-11.057c-0.039-0.003-0.941-0.003-0.977-0.003C-8.07-13.659-12.072-9.551-12.072-2.693 c0,4.234,0.072,11.142,4.872,14.89v0.485c-6.399,1.002-11.297,3.625-11.297,7.101c0,0.884,0.741,1.709,1.625,1.709h31.4 c0.885,0,1.996-0.825,1.996-1.709C16.524,16.307,12,13.684,5.6,12.682z',
+          color: '#56ABE4'
+        },
+        hoverable: hoverable_default
+      });
+
+      onlineTo10086_path1 = new PolylineShape({
+        style : {
+          pointList : [[315, 380], [375, 380]],
+          strokeColor : font_fill_value,
+          lineWidth : 2,
+          opacity: opacity_default,
+          lineType : 'dotted'
+        },
+        hoverable: hoverable_default
+      });
+
+      onlineTo10086_path2 = new PolylineShape({
+        style : {
+          pointList : [[375, 380], [415, 380], [415, 372]],
+          strokeColor : font_fill_text,
+          lineWidth : 2,
+          opacity: opacity_default
+        },
+        hoverable: hoverable_default
+      });
+
+      onlineTo10086_Title = new TextShape({
+        style : {
+          x : 350,
+          y : 370,
+          brushType : 'fill',
+          color : font_fill_text,
+          text : '转10086客户占比',
+          textFont : 'bold 16px verdana',
+          textAlign : 'left',
+          textBaseline : 'inside',
+          opacity: opacity_default
+        },
+        hoverable: hoverable_default
+      });
+
+      onlineTo10086_value = new TextShape({
+        style : {
+          x : 415,
+          y : 350,
+          brushType : 'fill',
+          color : font_fill_value,
+          text : channelsData[1].to10086Rate,
+          textFont : 'bold 22px verdana',
+          textAlign : 'left',
+          textBaseline : 'inside',
+          opacity: opacity_default
+        },
+        hoverable: hoverable_default
+      });
+
+      onlineTo10086_icon = new PathShape({
+        position: [390, 330],
+        style: {
+          path: 'M4.043,7.081c-1.715,0-3.045-0.132-3.427-0.174c-0.879-0.1-1.511-0.89-1.413-1.767 c0.098-0.875,0.875-1.507,1.767-1.414c3.982,0.437,10.085,0.059,11.151-2.16c0.381-0.795,1.335-1.135,2.135-0.75 c0.797,0.382,1.133,1.337,0.751,2.134C13.32,6.457,7.768,7.081,4.043,7.081z M18.4,5.491c-0.885,0-1.601-0.715-1.601-1.601v-5.513 l-2.138-0.762C14.025-2.611,13.6-3.215,13.6-3.892c0-7.938-6.459-14.4-14.399-14.4c-7.939,0-14.4,6.461-14.4,14.4 c0,0.517-0.249,1.002-0.67,1.303L-16.8-1.927v5.817c0,0.886-0.717,1.601-1.6,1.601S-20,4.776-20,3.891V-2.75 c0-0.518,0.25-1.002,0.67-1.303l0.949-0.676c0.44-9.318,8.157-16.763,17.581-16.763c9.321,0,16.973,7.283,17.564,16.459l2.173,0.774 C19.574-4.03,20-3.428,20-2.75v6.641C20,4.776,19.285,5.491,18.4,5.491z M5.6,12.682v-0.485c1.402-1.094,2.519-2.146,3.185-3.64 c-1.458,0.23-3.08,0.148-4.386,0.148c-1.6,0-2.967,0.044-3.799-0.049C-1.157,8.462-2.423,6.72-2.228,4.963 c0.195-1.758,1.792-3.032,3.533-2.827c3.563,0.383,7.489-0.033,9.063-0.7c0.067-1.461,0.049-3.002,0.049-4.173 c0-6.847-4.164-10.909-10.837-11.057c-0.039-0.003-0.941-0.003-0.977-0.003C-8.07-13.659-12.072-9.551-12.072-2.693 c0,4.234,0.072,11.142,4.872,14.89v0.485c-6.399,1.002-11.297,3.625-11.297,7.101c0,0.884,0.741,1.709,1.625,1.709h31.4 c0.885,0,1.996-0.825,1.996-1.709C16.524,16.307,12,13.684,5.6,12.682z',
+          color: '#56ABE4'
+        },
+        hoverable: hoverable_default
       });
 
       zr.addElement(robotTo10086_path1);
-      //zr.addElement(robotTo10086_path2);
+      zr.addElement(robotTo10086_path2);
+      zr.addElement(robotTo10086_Title);
+      zr.addElement(robotTo10086_value);
+      zr.addElement(robotTo10086_icon);
+
+      zr.addElement(onlineTo10086_path1);
+      zr.addElement(onlineTo10086_path2);
+      zr.addElement(onlineTo10086_Title);
+      zr.addElement(onlineTo10086_value);
+      zr.addElement(onlineTo10086_icon);
     }
 
     create10086Els();
 
-
     // 杯壁
 
-    zr.addShape(pathLeftBorder1);
-    zr.addShape(pathRightBorder1);
-    zr.addShape(pathLeftBorder2);
-    zr.addShape(pathRightBorder2);
-    zr.addShape(pathLeftBorder3);
-    zr.addShape(pathRightBorder3);
+    zr.addElement(pathLeftBorder1);
+    zr.addElement(pathRightBorder1);
+    zr.addElement(pathLeftBorder2);
+    zr.addElement(pathRightBorder2);
+    zr.addElement(pathLeftBorder3);
+    zr.addElement(pathRightBorder3);
 
     window.zr = zr;
 
     // zrender 绘制
-    zr.render();
+    //zr.render();
 });
