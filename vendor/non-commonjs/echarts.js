@@ -51864,6 +51864,10 @@ zrender.animation = {
     Cip: require('zrender/animation/Clip'),
     easing: require('zrender/animation/easing')
 }
+
+zrender.group = require('zrender/Group');
+
+
 var echarts = require('echarts');
 echarts.config = require('echarts/config');
 
