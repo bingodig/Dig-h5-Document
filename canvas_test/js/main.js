@@ -645,7 +645,7 @@ require(
             hoverable: hoverable_default,
             zlevel: 1
           });
-          networkPathCenterPoint = {x: borderCoordinate[indexData.index].rightTopX + networkWidth / 2};
+          networkPathCenterPoint = {x: borderCoordinate[indexData.index].leftTopX + networkWidth / 2};
         } else {
           // 最后一个
           var xxx1 = borderCoordinate[indexData.index].leftTopX + appWidth + weiXinWidth + (channelCount - 1) * 5;
