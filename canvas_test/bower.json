@@ -1,0 +1,32 @@
+{
+  "name": "canvas_test",
+  "version": "0.0.1",
+  "description": "canvas requirejs zrender",
+  "main": "main.js",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "canvas",
+    "requirejs",
+    "zrender"
+  ],
+  "authors": [
+    "caowj"
+  ],
+  "license": "MIT",
+  "homepage": "index.html",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone": "~1.2.1",
+    "underscore": "~1.8.3",
+    "jquery": "~2.1.4",
+    "zrender": "~2.1.1"
+  }
+}
