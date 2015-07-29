@@ -76,7 +76,7 @@
     var animDuration_default = 500;                  // 默认动画时长
     //    var easing_channelPath = mina.easeinout;         // 分渠道图形渐变函数
     var easing_channelPath = mina.elastic;         // 分渠道图形渐变函数
-    var opacity_default = 0;
+    var opacity_default = 1;
 
     // 左杯壁 左曲线
     var leftBorderLPath = svg.paper.path("M20,50Q90,200,90,480").toDefs();
@@ -138,9 +138,11 @@
 
     // 重用，减少memory leak和节省cpu
 
+    var arrowGtrForm = new Snap.Matrix().translate(0, 0).toTransformString();
+    var arrowGtrTo = new Snap.Matrix().translate(0, arrowGapHeight).toTransformString();
 
     // 5个箭头的动画，包括位移和透明度的变化
-    function arrowAnimation(arrowG) {
+    function arrowAnimation() {
         arrowG[0].animate({
             opacity: 0.2
         }, 1000, null, function () {
@@ -170,8 +172,6 @@
             });
         });
         // NOTE: defs中不使用transform，动画不会引用到各个use中。。。。大坑，原因未知
-        var arrowGtrForm = new Snap.Matrix().translate(0, 0).toTransformString();
-        var arrowGtrTo = new Snap.Matrix().translate(0, arrowGapHeight).toTransformString();
         arrowG.animate({transform: arrowGtrTo}
                 , 1000, null, function () {
                     arrowG.attr({transform: arrowGtrForm});
@@ -181,7 +181,7 @@
     var token_interval_arrowG;
 
     token_interval_arrowG = setInterval(function () {
-        arrowAnimation(arrowG);
+        arrowAnimation();
     }, 1050);
 
     // 绘制漏斗区域的图形
@@ -465,11 +465,11 @@
     var layer2AnimSet = Snap.set();                        // 第二层
     var layer3AnimSet = Snap.set();                        // 第三层
 
-    // 分渠道向下转化动画分组
+    // 分渠道触发动画的元素集合
     var channel1HoverElementSet = Snap.set();                      // APP 分渠道
     var channel2HoverElementSet = Snap.set();                      // 微信 分渠道
     var channel3HoverElementSet = Snap.set();                      // 网络 分渠道
-    // TODO: 点击分渠道icon时，可能要重新初始化下列变量，以控制分渠道动画的执行
+    // 分渠道执行动画的元素集合
     var channel1AnimSet = Snap.set();                      // APP 分渠道
     var channel2AnimSet = Snap.set();                      // 微信 分渠道
     var channel3AnimSet = Snap.set();                      // 网络 分渠道
@@ -546,34 +546,32 @@
             newTotal += networkRate;
         }
 
-        // TODO: 分渠道显示的数值也需要改变吗？
+        // 到分渠道的数量改变时，分渠道显示的数值（占比）也会改变
         appRate = appRate / newTotal;
         weiXinRate = weiXinRate / newTotal;
         networkRate = networkRate / newTotal;
 
-        // TODO 0 渠道
+        // 计算每层杯壁内侧左右两侧的距离，已减去可能出现的间隔
         var layerWidth = borderCoordinate[indexData.index].rightTopX - borderCoordinate[indexData.index].leftTopX
                 - channelGapLength * (channelCount - 1);
         var layerBottomWidth = borderCoordinate[indexData.index].rightBottomX - borderCoordinate[indexData.index].leftBottomX
                 - channelGapLength * (channelCount - 1);
-
+        // 该层的高度
         var layerHeight = borderCoordinate[indexData.index].rightBottomY - borderCoordinate[indexData.index].rightTopY;
-
+        // 高层Y轴中心点
         var layerCenterY = borderCoordinate[indexData.index].rightTopY + layerHeight / 2;
         // app 图形绘制
         // TODO 如果宽度没有到达杯壁下面的点，怎么处理，
         // TODO 即 图形杯壁方向的bottomX小于杯壁内侧的bottomX（左边，右边是大于）
         // TODO 如果分渠道的宽度小，重新计算text的坐标X，
         if (appRate > 0 && flag_App) {
-            appWidth = appRate * layerWidth;     // 分渠道APP图形的宽度
+            appWidth = appRate * layerWidth;     // 分渠道APP图形的上方宽度
             appBottomWidth = appRate * layerBottomWidth;
             // 第一个且最后一个
             if (channelCount === 1) {
-                appPath = svg.paper.path(borderCoordinate[indexData.index].leftPathStr + "l" + appWidth*0.2 + ",0" + borderCoordinate[indexData.index].rightPathStr.replace("M", "L") + "Z").attr({
+                appPath = svg.paper.path(borderCoordinate[indexData.index].leftPathStr + "l" + appWidth + ",0" + borderCoordinate[indexData.index].rightPathStr.replace("M", "L") + "Z").attr({
                     fill: defaultColor
-                }).animate({
-                    path: borderCoordinate[indexData.index].leftPathStr + "l" + appWidth + ",0" + borderCoordinate[indexData.index].rightPathStr.replace("M", "L") + "Z"
-                }, 1000, easing_channelPath);
+                });
             } else {
                 // 不是最后一个，右边不是弧线
                 appPath = svg.paper.path(borderCoordinate[indexData.index].leftPathStr + "l" + appWidth + ",0l0," + layerHeight + "Z")
@@ -756,7 +754,7 @@
                 networkPath = svg.paper.path(borderCoordinate[indexData.index].leftPathStr + "l" + networkWidth + ",0" + borderCoordinate[indexData.index].rightPathStr.replace("M", "L") + "Z").attr({
                     fill: defaultColor
                 });
-                networkPathCenterPoint = {x: borderCoordinate[indexData.index].leftBottomX + networkBottomWidth / 2};
+                networkPathCenterPoint = {x: borderCoordinate[indexData.index].rightTopX + networkWidth / 2};
             } else {
                 // 最后一个
                 var xxx1 = borderCoordinate[indexData.index].leftTopX + appWidth + weiXinWidth + (channelCount - 1) * 5;
@@ -766,7 +764,7 @@
                         "l0," + (layerHeight * -1) + "Z").attr({
                     fill: defaultColor
                 });
-                networkPathCenterPoint = {x: borderCoordinate[indexData.index].rightBottomX - networkBottomWidth / 2};
+                networkPathCenterPoint = {x: borderCoordinate[indexData.index].rightTopX - networkWidth / 2};
             }
 
             // 分渠道数字和流转部分
@@ -836,12 +834,12 @@
     // 漏斗图三层图形的创建
     function createFunnel(){
         // 停止动画和隐藏元素
-        hideAllContentAndStopAnimation();
-        stopLayerAnimation();
-        if(token_interval_arrowG) {
-            clearInterval(token_interval_arrowG);
-            token_interval_arrowG = null;
-        }
+//        hideAllContentAndStopAnimation();
+//        stopLayerAnimation();
+//        if(token_interval_arrowG) {
+//            clearInterval(token_interval_arrowG);
+//            token_interval_arrowG = null;
+//        }
 
 
         // 清空set
@@ -873,10 +871,11 @@
         createChannelArea(channelsData[2], layer3AnimSet, layer3Paths_arr, colorL3Default, colorsL3Active, opacity_default);
 
         funnelIndexConversionG.appendTo(svg);
+        create10086Els();
+//        bindBorderHover();
+//        bindChannelAnim_onMouseOver();
 
-        bindChannelAnim_onMouseOver();
-
-        startLayerAnimation();
+//        startLayerAnimation();
     }
 
     createFunnel();
@@ -919,56 +918,60 @@
     /*
      ***************************** 绑定三层杯壁的鼠标移入移出的事件 *************************
      */
-    pathLeftBorder1.unhover().hover(
-            function () {
-                onHoverIn_layer(layer1AnimSet, layer1Paths_arr)
-            },
-            function () {
-                onHoverOut_layer(layer1Paths_arr)
-            }
-    );
-    pathRightBorder1.unhover().hover(
-            function () {
-                onHoverIn_layer(layer1AnimSet, layer1Paths_arr)
-            },
-            function () {
-                onHoverOut_layer(layer1Paths_arr)
-            }
-    );
 
-    pathLeftBorder2.unhover().hover(
-            function () {
-                onHoverIn_layer(layer2AnimSet, layer2Paths_arr);
-            },
-            function () {
-                onHoverOut_layer(layer2Paths_arr);
-            }
-    );
-    pathRightBorder2.unhover().hover(
-            function () {
-                onHoverIn_layer(layer2AnimSet, layer2Paths_arr);
-            },
-            function () {
-                onHoverOut_layer(layer2Paths_arr);
-            }
-    );
+    function bindBorderHover(){
+        pathLeftBorder1.unhover().hover(
+                function () {
+                    onHoverIn_layer(layer1AnimSet, layer1Paths_arr)
+                },
+                function () {
+                    onHoverOut_layer(layer1Paths_arr)
+                }
+        );
+        pathRightBorder1.unhover().hover(
+                function () {
+                    onHoverIn_layer(layer1AnimSet, layer1Paths_arr)
+                },
+                function () {
+                    onHoverOut_layer(layer1Paths_arr)
+                }
+        );
 
-    pathLeftBorder3.unhover().hover(
-            function () {
-                onHoverIn_layer(layer3AnimSet, layer3Paths_arr);
-            },
-            function () {
-                onHoverOut_layer(layer3Paths_arr);
-            }
-    );
-    pathRightBorder3.unhover().hover(
-            function () {
-                onHoverIn_layer(layer3AnimSet, layer3Paths_arr);
-            },
-            function () {
-                onHoverOut_layer(layer3Paths_arr);
-            }
-    );
+        pathLeftBorder2.unhover().hover(
+                function () {
+                    onHoverIn_layer(layer2AnimSet, layer2Paths_arr);
+                },
+                function () {
+                    onHoverOut_layer(layer2Paths_arr);
+                }
+        );
+        pathRightBorder2.unhover().hover(
+                function () {
+                    onHoverIn_layer(layer2AnimSet, layer2Paths_arr);
+                },
+                function () {
+                    onHoverOut_layer(layer2Paths_arr);
+                }
+        );
+
+        pathLeftBorder3.unhover().hover(
+                function () {
+                    onHoverIn_layer(layer3AnimSet, layer3Paths_arr);
+                },
+                function () {
+                    onHoverOut_layer(layer3Paths_arr);
+                }
+        );
+        pathRightBorder3.unhover().hover(
+                function () {
+                    onHoverIn_layer(layer3AnimSet, layer3Paths_arr);
+                },
+                function () {
+                    onHoverOut_layer(layer3Paths_arr);
+                }
+        );
+    }
+
 
 
     // 总渠道转化和10086另外弄，因为位置是固定的
@@ -977,107 +980,112 @@
      **************      10086转化占比          ********************
      */
 
-    var robotTo10086_path1 = svg.paper
-            .path('M335,200h30')
-            .attr({
-                'stroke-dasharray': "2,2",
-                stroke: font_fill_value,
+    // TODO: 逻辑上不需要重新创建
+    function create10086Els(){
+        var robotTo10086_path1 = svg.paper
+                .path('M335,200h30')
+                .attr({
+                    'stroke-dasharray': "2,2",
+                    stroke: font_fill_value,
+                    opacity: opacity_default
+                });
+
+        var robotTo10086_path2 = svg.paper
+                .path('M365,200h50v-8')
+                .attr({
+                    fill: 'none',
+                    stroke: font_fill_text,
+                    opacity: opacity_default
+                });
+
+        var robotTo10086_Title = svg.paper
+                .text(360, 190, '转10086客户占比')
+                .attr({
+                    fill: font_fill_text,
+                    'font-weight': font_weight_normal,
+                    fontSize: font_size_normal,
+                    opacity: opacity_default
+                });
+
+
+        var robotTo10086_value = svg.paper.text(410, 170, channelsData[0].to10086Rate)
+                .attr({
+                    'font-size': 22,
+                    fill: font_fill_value,
+                    'foot-weight': font_weight_value,
+                    opacity: opacity_default
+                });
+
+
+        var onlineTo10086_path1 = svg.paper
+                .path('M315,380h30')
+                .attr({
+                    'stroke-dasharray': "2,2",
+                    stroke: font_fill_value,
+                    opacity: opacity_default
+                });
+
+        var onlineTo10086_path2 = svg.paper
+                .path('M345,380h50v-8')
+                .attr({
+                    fill: 'none',
+                    stroke: font_fill_text,
+                    opacity: opacity_default
+                });
+
+        var onlineTo10086_Title = svg.paper
+                .text(340, 370, '转10086客户占比')
+                .attr({
+                    fill: font_fill_text,
+                    'font-weight': font_weight_normal,
+                    fontSize: font_size_normal,
+                    opacity: opacity_default
+                });
+
+
+        var onlineTo10086_value = svg.paper.text(390, 350, channelsData[1].to10086Rate)
+                .attr({
+                    'font-size': 22,
+                    fill: font_fill_value,
+                    'foot-weight': font_weight_value,
+                    opacity: opacity_default
+                });
+
+        layer2AnimSet.push(robotTo10086_path1, robotTo10086_path2, robotTo10086_Title, robotTo10086_value);
+        layer3AnimSet.push(onlineTo10086_path1, onlineTo10086_path2, onlineTo10086_Title, onlineTo10086_value);
+
+        var robotTo10086_icon;
+        Snap.load("./assets/svg/iconfont-servicefill.svg", function (f) {
+            robotTo10086_icon = f.selectAll("svg")[0].attr({
+                x: 370,
+                y: 140,
+                height: 36,
+                width: 36,
+                'pointer-events': 'none',
                 opacity: opacity_default
             });
-
-    var robotTo10086_path2 = svg.paper
-            .path('M365,200h50v-8')
-            .attr({
-                fill: 'none',
-                stroke: font_fill_text,
-                opacity: opacity_default
-            });
-
-    var robotTo10086_Title = svg.paper
-            .text(360, 190, '转10086客户占比')
-            .attr({
-                fill: font_fill_text,
-                'font-weight': font_weight_normal,
-                fontSize: font_size_normal,
-                opacity: opacity_default
-            });
-
-
-    var robotTo10086_value = svg.paper.text(410, 170, channelsData[0].to10086Rate)
-            .attr({
-                'font-size': 22,
-                fill: font_fill_value,
-                'foot-weight': font_weight_value,
-                opacity: opacity_default
-            });
-
-
-    var onlineTo10086_path1 = svg.paper
-            .path('M315,380h30')
-            .attr({
-                'stroke-dasharray': "2,2",
-                stroke: font_fill_value,
-                opacity: opacity_default
-            });
-
-    var onlineTo10086_path2 = svg.paper
-            .path('M345,380h50v-8')
-            .attr({
-                fill: 'none',
-                stroke: font_fill_text,
-                opacity: opacity_default
-            });
-
-    var onlineTo10086_Title = svg.paper
-            .text(340, 370, '转10086客户占比')
-            .attr({
-                fill: font_fill_text,
-                'font-weight': font_weight_normal,
-                fontSize: font_size_normal,
-                opacity: opacity_default
-            });
-
-
-    var onlineTo10086_value = svg.paper.text(390, 350, channelsData[1].to10086Rate)
-            .attr({
-                'font-size': 22,
-                fill: font_fill_value,
-                'foot-weight': font_weight_value,
-                opacity: opacity_default
-            });
-
-    layer2AnimSet.push(robotTo10086_path1, robotTo10086_path2, robotTo10086_Title, robotTo10086_value);
-    layer3AnimSet.push(onlineTo10086_path1, onlineTo10086_path2, onlineTo10086_Title, onlineTo10086_value);
-
-    var robotTo10086_icon;
-    Snap.load("./assets/svg/iconfont-servicefill.svg", function (f) {
-        robotTo10086_icon = f.selectAll("svg")[0].attr({
-            x: 370,
-            y: 140,
-            height: 36,
-            width: 36,
-            'pointer-events': 'none',
-            opacity: opacity_default
+            robotTo10086_icon.selectAll('path')[0].attr({fill: '#56abe4'});
+            svg.append(robotTo10086_icon);
+            layer2AnimSet.push(robotTo10086_icon);
         });
-        robotTo10086_icon.selectAll('path')[0].attr({fill: '#56abe4'});
-        svg.append(robotTo10086_icon);
-        layer2AnimSet.push(robotTo10086_icon);
-    });
 
-    var onlineTo10086_icon;
-    Snap.load("./assets/svg/iconfont-servicefill.svg", function (f) {
-        onlineTo10086_icon = f.selectAll("svg")[0].attr({
-            x: 350,
-            y: 320,
-            height: 36,
-            width: 36,
-            'pointer-events': 'none',
-            opacity: opacity_default
+        var onlineTo10086_icon;
+        Snap.load("./assets/svg/iconfont-servicefill.svg", function (f) {
+            onlineTo10086_icon = f.selectAll("svg")[0].attr({
+                x: 350,
+                y: 320,
+                height: 36,
+                width: 36,
+                'pointer-events': 'none',
+                opacity: opacity_default
+            });
+            onlineTo10086_icon.selectAll('path')[0].attr({fill: '#56abe4'});
+            svg.append(onlineTo10086_icon);
+            layer3AnimSet.push(onlineTo10086_icon);
         });
-        onlineTo10086_icon.selectAll('path')[0].attr({fill: '#56abe4'});
-        svg.append(onlineTo10086_icon);
-        layer3AnimSet.push(onlineTo10086_icon);
-    });
+
+    }
+
 
     /*
      **************      杯壁 转化箭头和数值显示 defs          ********************
@@ -1210,11 +1218,6 @@
      * 开始层次转化动画
      */
     function startLayerAnimation() {
-        if(!token_interval_arrowG){
-            token_interval_arrowG = setInterval(function () {
-                arrowAnimation(arrowG);
-            }, 1050);
-        }
         if (!layerAnimationToken) {
             layerFlowAnimation();
             layerAnimationToken = setInterval(layerFlowAnimation, 8000);
@@ -1241,10 +1244,6 @@
             clearInterval(layerAnimationToken);
             layerAnimationToken = null;
         }
-//        if(token_interval_arrowG) {
-//            clearInterval(token_interval_arrowG);
-//            token_interval_arrowG = null;
-//        }
     }
 
 
@@ -1456,6 +1455,11 @@
         }
         var restartTimeoutToken = setTimeout(function(){
             startLayerAnimation();
+            if(!token_interval_arrowG){
+                token_interval_arrowG = setInterval(function () {
+                    arrowAnimation(arrowG);
+                }, 1050);
+            }
             if(restartTimeoutToken){
                 clearTimeout(restartTimeoutToken);
                 restartTimeoutToken = null;
