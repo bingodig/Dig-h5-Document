@@ -1521,6 +1521,48 @@ ul.slides li span {
 .dashborad-formItem-margin {
   margin: ;
 }*/
+/*======== 定义变量===========*/
+#csoc-canvas {
+  background: transparent url('../../../i/layouts/cloth.png');
+}
+#csoc-canvas .am-topbar {
+  /*background: transparent none;*/
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.42) inset, 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-width: 0 0;
+}
+#csoc-canvas .csoc-content {
+  position: relative;
+  top: 50px;
+  background: transparent url('../../../i/layouts/cloth.png');
+}
+#csoc-canvas .csoc-content .csoc-channel {
+  /*margin-top: -10px;*/
+}
+#csoc-canvas .csoc-content .csoc-channel .csoc-channel-info {
+  padding: 0 0 0 10px;
+}
+#csoc-canvas .topDimArea {
+  display: block;
+  width: 100%;
+  /*background: '#ffffff',
+    background: pageBGcolor,*/
+  zIndex: 9;
+  padding: 5px 5px 5px 15px;
+}
+#csoc-canvas .content-panel {
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.42) inset, 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+#csoc-canvas .am-panel {
+  /*background: transparent none;*/
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.42) inset, 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: none;
+}
+#csoc-canvas .am-form-field {
+  height: 28px;
+}
 .amr-nav,
 .amr-nav ul {
   padding-left: 0;
