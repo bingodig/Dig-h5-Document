@@ -1523,7 +1523,7 @@ ul.slides li span {
 }*/
 /*======== 定义变量===========*/
 #csoc-canvas {
-  background: transparent url('../../../i/layouts/cloth.png');
+  background: transparent url('/i/layouts/cloth.png');
 }
 #csoc-canvas .am-topbar {
   /*background: transparent none;*/
@@ -1534,7 +1534,7 @@ ul.slides li span {
 #csoc-canvas .csoc-content {
   position: relative;
   top: 50px;
-  background: transparent url('../../../i/layouts/cloth.png');
+  background: transparent url('/i/layouts/cloth.png');
 }
 #csoc-canvas .csoc-content .csoc-channel {
   /*margin-top: -10px;*/
